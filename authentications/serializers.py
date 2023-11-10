@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
-from authen.models import CustomUser
+from authentications.models import CustomUser
 
 
 class UserGroupsSerializers(serializers.ModelSerializer):

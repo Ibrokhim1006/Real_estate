@@ -1,7 +1,7 @@
 """ Django Libraries """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from authentications.models import CustomUser
+from authentications.models import CustomUser, PyemntSumm
 from authentications.forms import ChangeUser, CreasteUser
 
 
@@ -20,15 +20,16 @@ class NewMyUser(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (
             None,
-            {"fields": ("avatar", "email_code",)},
+            {"fields": ("avatar", "email_code", "summ", )},
         ),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
             None,
-            {"fields": ("avatar", "email_code",)},
+            {"fields": ("avatar", "email_code", "summ", )},
         ),
     )
 
 
 admin.site.register(CustomUser, NewMyUser)
+admin.site.register(PyemntSumm)
