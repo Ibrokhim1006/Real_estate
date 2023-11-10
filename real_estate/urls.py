@@ -13,6 +13,12 @@ from real_estate.views import (
     AmenitiesListViews,
     NumberRoomsListViews,
     RealEstateListViews,
+    MyRealEstateListViews,
+    BuyMyRealEstateListViews,
+    ActiveMyRealEstateListViews,
+    SenByuyMyRealEstateListViews,
+    UserBuyRealEstateListViews,
+    UserSendBuyRealEstateListViews,
 )
 
 urlpatterns = [
@@ -31,4 +37,18 @@ urlpatterns = [
     path("amenities_list_views/", AmenitiesListViews.as_view()),
     path("number_rooms_list_views/", NumberRoomsListViews.as_view()),
     path("real_estate_list_views/", RealEstateListViews.as_view()),
+    path('my_real_estate_list_views/', MyRealEstateListViews.as_view()),
+    path('buy_myreal_estate_list_views/', BuyMyRealEstateListViews.as_view()),
+    path(
+        'active_myreal_estate_list_views/',
+        ActiveMyRealEstateListViews.as_view()),
+    path(
+        'send_buy_myreal_estate_list_views/',
+        SenByuyMyRealEstateListViews.as_view()),
+    path(
+        'user_buy_real_estate_list_views/',
+        UserBuyRealEstateListViews.as_view()),
+    path(
+        'user_send_buy_real_estate_list_views/<int:pk>/',
+        UserSendBuyRealEstateListViews.as_view()),
 ]

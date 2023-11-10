@@ -18,6 +18,7 @@ from real_estate.models import (
     NumberRooms,
     RealEstate,
     RealEstetImgaes,
+    BuyRealEstet,
 )
 from real_estate.serializers import (
     CurrencySerializers,
@@ -39,6 +40,8 @@ from real_estate.serializers import (
     RealEstateSerializers,
     RealEstateCrudSerializers,
     RealEstetImgaesSerializers,
+    BuyRealEstetSerializers,
+    SendBuyRealEstetSerializers,
 )
 
 
@@ -380,3 +383,92 @@ class RealEstateImgViews(APIView):
         objects_get.delete()
         return Response(
             {"message": "Delete success"}, status=status.HTTP_200_OK)
+
+
+class MyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = RealEstate.objects.filter(
+            author_id=request.user.id)
+        serializers = RealEstateSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class BuyMyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = RealEstate.objects.filter(
+            author_id=request.user.id, is_active=True)
+        serializers = RealEstateSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class ActiveMyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = RealEstate.objects.filter(
+            author_id=request.user.id, is_active=False)
+        serializers = RealEstateSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class SenByuyMyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = BuyRealEstet.objects.filter(
+            real_estet_id__author_id=request.user.id, is_active=False)
+        serializers = BuyRealEstetSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        objects_list = BuyRealEstet.objects.filter(
+            real_estet_id__author_id=request.user.id, is_active=False)[0]
+        objects_list.is_active = True
+        objects_list.save()
+        return Response({'message': 'save'}, status=status.HTTP_200_OK)
+
+
+class UserBuyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = BuyRealEstet.objects.filter(
+            user_id=request.user.id, is_active=True)
+        serializers = BuyRealEstetSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class UserSendBuyRealEstateListViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = BuyRealEstet.objects.filter(
+            id=pk,
+            user_id=request.user.id, is_active=True)
+        serializers = BuyRealEstetSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
+        real_estate = RealEstate.objects.filter(id=pk)[0]
+        """RealEstateListViews POST views"""
+        serializer = SendBuyRealEstetSerializers(
+            data=request.data,
+            context={
+                "user_id": request.user,
+                "real_estet_id": real_estate,
+            },
+        )
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data)

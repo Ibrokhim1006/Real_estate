@@ -150,7 +150,10 @@ class RealEstetImgaes(models.Model):
 
 
 class BuyRealEstet(models.Model):
-    real_estet_id = models.ForeignKey(RealEstate, on_delete=models.CASCADE)
+    real_estet_id = models.ForeignKey(
+        RealEstate, on_delete=models.CASCADE, null=True, blank=True)
     user_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, null=True, blank=True)
+    is_active = models.BooleanField(default=False)
     datetime = models.DateTimeField(auto_now_add=True)

@@ -16,6 +16,7 @@ from real_estate.models import (
     NumberRooms,
     RealEstate,
     RealEstetImgaes,
+    BuyRealEstet,
 )
 
 
@@ -396,5 +397,35 @@ class RealEstetImgaesSerializers(serializers.ModelSerializer):
         else:
             instance.img = validated_data.get(
                     "img", instance.img)
+        instance.save()
+        return instance
+
+
+class BuyRealEstetSerializers(serializers.ModelSerializer):
+    """BuyRealEstet Serializer"""
+
+    class Meta:
+        model = BuyRealEstet
+        fields = "__all__"
+
+
+class SendBuyRealEstetSerializers(serializers.ModelSerializer):
+    """BuyRealEstet Serializer"""
+
+    class Meta:
+        model = BuyRealEstet
+        fields = ['id', 'user_id', 'real_estet_id']
+
+    def create(self, validated_data):
+        """BuyRealEstet Create Function"""
+        real_estet = BuyRealEstet.objects.create(**validated_data)
+        real_estet.user_id = self.context.get("user_id")
+        real_estet.real_estet_id = self.context.get('real_estet_id')
+        real_estet.save()
+        return real_estet
+
+    def update(self, instance, validated_data):
+        """BuyRealEstet Update Function"""
+        instance.name = validated_data.get("name", instance.name)
         instance.save()
         return instance
