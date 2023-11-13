@@ -9,18 +9,18 @@ from drf_spectacular.views import SpectacularAPIView
 
 
 urlpatterns = [
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("project/real-estet/api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-        "api/token/", jwt_views.TokenObtainPairView.as_view(),
+        "project/real-estet/api/token/", jwt_views.TokenObtainPairView.as_view(),
         name="token_obtain_pair"
     ),
     path(
-        "api/token/refresh/", jwt_views.TokenRefreshView.as_view(),
+        "project/real-estet/api/token/refresh/", jwt_views.TokenRefreshView.as_view(),
         name="token_refresh"
     ),
-    path("admin/", admin.site.urls),
+    path("project/real-estet/api/admin/", admin.site.urls),
     path(
-        "docs/",
+        "project/real-estet/api/docs/",
         TemplateView.as_view(
             template_name="doc.html",
             extra_context={"schema_url": "api_schema"}
@@ -28,12 +28,12 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path(
-        "api/password_reset/",
+        "project/real-estet/api/password_reset/",
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
-    path('admin/', admin.site.urls),
-    path('authentication/api/', include('authentications.urls')),
-    path('real_estate/api/', include('real_estate.urls')),
+    path('project/real-estet/api/admin/', admin.site.urls),
+    path('project/real-estet/api/authentication/api/', include('authentications.urls')),
+    path('project/real-estet/api/real_estate/api/', include('real_estate.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
